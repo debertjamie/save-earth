@@ -1,0 +1,172 @@
+<Page x:Class="SaveEarth.Views.DashboardPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      Title="Dashboard"
+      Background="#F3F4F6">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0"
+                Background="#10B981"
+                Padding="20">
+            <TextBlock x:Name="GreetingText"
+                       Text="Welcome"
+                       FontSize="22"
+                       FontWeight="Bold"
+                       Foreground="White"
+                       HorizontalAlignment="Center"/>
+        </Border>
+
+        <ScrollViewer Grid.Row="1"
+                      Margin="20">
+            <StackPanel>
+
+                <Border Background="White"
+                        CornerRadius="12"
+                        Padding="20"
+                        Margin="0,0,0,15">
+                    <Border.Effect>
+                        <DropShadowEffect Color="#9CA3AF"
+                                          Opacity="0.3"
+                                          BlurRadius="10"
+                                          ShadowDepth="2"/>
+                    </Border.Effect>
+                    <StackPanel>
+                        <TextBlock Text="Today's Emission"
+                                   FontSize="16"
+                                   FontWeight="SemiBold"
+                                   Foreground="#4B5563"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,0,0,8"/>
+                        <TextBlock x:Name="EmissionText"
+                                   Text="0 kg CO₂"
+                                   FontSize="34"
+                                   FontWeight="Bold"
+                                   Foreground="#1F2937"
+                                   HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+
+                <Border Background="White"
+                        CornerRadius="12"
+                        Padding="20"
+                        Margin="0,0,0,15">
+                    <Border.Effect>
+                        <DropShadowEffect Color="#9CA3AF"
+                                          Opacity="0.1"
+                                          BlurRadius="5"
+                                          ShadowDepth="1"/>
+                    </Border.Effect>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Text="Total Points"
+                                       FontSize="13"
+                                       Foreground="#6B7280"
+                                       HorizontalAlignment="Center"/>
+                            <TextBlock x:Name="PointsText"
+                                       Text="0"
+                                       FontSize="22"
+                                       FontWeight="Bold"
+                                       Foreground="#F39C12"
+                                       HorizontalAlignment="Center"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1">
+                            <TextBlock Text="Active Challenges"
+                                       FontSize="13"
+                                       Foreground="#6B7280"
+                                       HorizontalAlignment="Center"/>
+                            <TextBlock x:Name="ActiveChallengesText"
+                                       Text="0"
+                                       FontSize="22"
+                                       FontWeight="Bold"
+                                       Foreground="#10B981"
+                                       HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <Border Background="White"
+                        CornerRadius="12"
+                        Padding="20"
+                        Margin="0,0,0,20">
+                    <Border.Effect>
+                        <DropShadowEffect Color="#9CA3AF"
+                                          Opacity="0.1"
+                                          BlurRadius="5"
+                                          ShadowDepth="1"/>
+                    </Border.Effect>
+                    <StackPanel>
+                        <TextBlock Text="💡 Recommendation"
+                                   FontSize="15"
+                                   FontWeight="Bold"
+                                   Foreground="#1F2937"
+                                   Margin="0,0,0,6"/>
+                        <TextBlock x:Name="RecommendationText"
+                                   FontSize="14"
+                                   Foreground="#4B5563"
+                                   TextWrapping="Wrap"/>
+                    </StackPanel>
+                </Border>
+
+                <Button Content="Daily Tracker"
+                        Height="44"
+                        FontSize="15"
+                        FontWeight="Bold"
+                        Foreground="White"
+                        Background="#10B981"
+                        BorderThickness="0"
+                        Cursor="Hand"
+                        Click="DailyTracker_Click"
+                        Margin="0,0,0,12">
+                    <Button.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="8"/>
+                        </Style>
+                    </Button.Resources>
+                </Button>
+
+                <Button Content="Challenges"
+                        Height="44"
+                        FontSize="15"
+                        FontWeight="Bold"
+                        Foreground="White"
+                        Background="#2ECC71"
+                        BorderThickness="0"
+                        Cursor="Hand"
+                        Click="Challenges_Click"
+                        Margin="0,0,0,12">
+                    <Button.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="8"/>
+                        </Style>
+                    </Button.Resources>
+                </Button>
+
+                <Button Content="Logout"
+                        Height="40"
+                        FontSize="14"
+                        FontWeight="SemiBold"
+                        Foreground="#4B5563"
+                        Background="#E5E7EB"
+                        BorderThickness="0"
+                        Cursor="Hand"
+                        Click="Logout_Click">
+                    <Button.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="8"/>
+                        </Style>
+                    </Button.Resources>
+                </Button>
+
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Page>
