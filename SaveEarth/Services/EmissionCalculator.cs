@@ -1,7 +1,27 @@
+using System.Collections.Generic;
+using SaveEarth.Models;
+
 namespace SaveEarth.Services;
 
 public class EmissionCalculator
 {
+    // private: hanya dapat diakses di dalam class EmissionCalculator
+    private static float RoundEmission(float value) => MathF.Round(value, 2);
+
+    // public: dapat diakses dari luar class maupun assembly
+    public float CalculateTotalEmission(IEnumerable<EmissionActivity> activities)
+    {
+        ArgumentNullException.ThrowIfNull(activities);
+
+        float total = 0f;
+        foreach (EmissionActivity activity in activities)
+        {
+            // Polymorphism: method yang dipanggil menyesuaikan tipe objek aslinya
+            total += activity.CalculateEmission();
+        }
+        return RoundEmission(total);
+    }
+
     public float CalculateDailyEmission(Models.DailyTracking dailyTracking)
     {
         ArgumentNullException.ThrowIfNull(dailyTracking);
