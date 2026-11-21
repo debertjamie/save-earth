@@ -6,9 +6,15 @@ public class Admin
 {
     public string AdminId { get; private set; } = string.Empty;
     public string Role { get; private set; } = "Admin";
-    public List<User> Users { get; } = new();
+
+    // private: field internal yang hanya dapat diakses di dalam class Admin
+    private readonly List<User> _users = new();
+    private readonly List<Challenge> _challenges = new();
+
+    // public: properti yang dapat diakses dari mana saja
+    public List<User> Users => _users;
     public List<Survey> Surveys { get; } = new();
-    public List<Challenge> Challenges { get; } = new();
+    public List<Challenge> Challenges => _challenges;
     public HashSet<string> RecommendationIds { get; } = new(StringComparer.OrdinalIgnoreCase);
 
     public Admin(string adminId)
@@ -20,25 +26,25 @@ public class Admin
     public void AddUser(User user)
     {
         ArgumentNullException.ThrowIfNull(user);
-        if (Users.Any(existing => existing.UserId == user.UserId))
+        if (_users.Any(existing => existing.UserId == user.UserId))
         {
             throw new InvalidOperationException("A user with the same ID already exists.");
         }
 
-        Users.Add(user);
+        _users.Add(user);
     }
 
     public bool RemoveUser(string userId)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(userId);
-        var user = Users.FirstOrDefault(existing => existing.UserId == userId);
-        return user is not null && Users.Remove(user);
+        var user = _users.FirstOrDefault(existing => existing.UserId == userId);
+        return user is not null && _users.Remove(user);
     }
 
     public void UpdateUser(User user, string name, string email, string password)
     {
         ArgumentNullException.ThrowIfNull(user);
-        if (!Users.Contains(user))
+        if (!_users.Contains(user))
         {
             throw new InvalidOperationException("The user is not managed by this administrator.");
         }
@@ -75,7 +81,7 @@ public class Admin
         var durationDays = (int)Math.Ceiling((endDate - startDate).TotalDays);
         var challenge = new Challenge(
             Guid.NewGuid().ToString("N"), challengeName, description, 0, durationDays, 0.0f);
-        Challenges.Add(challenge);
+        _challenges.Add(challenge);
         return challenge;
     }
 
@@ -95,9 +101,9 @@ public class Admin
     {
         return JsonSerializer.Serialize(new
         {
-            UserCount = Users.Count,
+            UserCount = _users.Count,
             SurveyCount = Surveys.Count,
-            ChallengeCount = Challenges.Count,
+            ChallengeCount = _challenges.Count,
             RecommendationCount = RecommendationIds.Count
         });
     }

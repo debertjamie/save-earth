@@ -4,10 +4,13 @@ namespace SaveEarth.Models;
 
 public class User
 {
+    // public: dapat diakses dari mana saja (di luar class maupun assembly)
     public string UserId { get; private set; } = string.Empty;
     public string Name { get; private set; } = string.Empty;
     public string Email { get; private set; } = string.Empty;
-    public string PasswordHash { get; private set; } = string.Empty;
+
+    // internal: hanya dapat diakses di dalam assembly (proyek) yang sama
+    internal string PasswordHash { get; private set; } = string.Empty;
     public List<UserChallenge> Challenges { get; } = new();
     public List<SurveyResponse> SurveyResponses { get; } = new();
     public List<string> DailyActivities { get; } = new();
