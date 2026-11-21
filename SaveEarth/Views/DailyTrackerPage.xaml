@@ -1,0 +1,146 @@
+<Page x:Class="SaveEarth.Views.DailyTrackerPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      Title="Daily Tracker"
+      Background="#F3F4F6">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0"
+                Background="#10B981"
+                Padding="20">
+            <TextBlock Text="Daily Tracker"
+                       FontSize="22"
+                       FontWeight="Bold"
+                       Foreground="White"
+                       HorizontalAlignment="Center"/>
+        </Border>
+
+        <ScrollViewer Grid.Row="1"
+                      Margin="20">
+            <StackPanel>
+                <Border Background="White"
+                        CornerRadius="12"
+                        Padding="25"
+                        Margin="0,0,0,15">
+                    <Border.Effect>
+                        <DropShadowEffect Color="#9CA3AF"
+                                          Opacity="0.3"
+                                          BlurRadius="10"
+                                          ShadowDepth="2"/>
+                    </Border.Effect>
+                    <StackPanel>
+                        <TextBlock Text="Activity Type"
+                                   FontSize="13"
+                                   FontWeight="SemiBold"
+                                   Foreground="#4B5563"
+                                   Margin="0,0,0,4"/>
+                        <ComboBox x:Name="ActivityBox"
+                                  Height="34"
+                                  FontSize="14"
+                                  VerticalContentAlignment="Center"
+                                  Margin="0,0,0,15">
+                            <ComboBoxItem Content="Driving" Tag="driving"/>
+                            <ComboBoxItem Content="Flying" Tag="flying"/>
+                            <ComboBoxItem Content="Electricity" Tag="electricity"/>
+                        </ComboBox>
+
+                        <TextBlock Text="Value"
+                                   FontSize="13"
+                                   FontWeight="SemiBold"
+                                   Foreground="#4B5563"
+                                   Margin="0,0,0,4"/>
+                        <TextBox x:Name="ValueBox"
+                                 Height="34"
+                                 FontSize="14"
+                                 Padding="6,0"
+                                 VerticalContentAlignment="Center"
+                                 Margin="0,0,0,15"/>
+
+                        <TextBlock Text="Notes (optional)"
+                                   FontSize="13"
+                                   FontWeight="SemiBold"
+                                   Foreground="#4B5563"
+                                   Margin="0,0,0,4"/>
+                        <TextBox x:Name="NotesBox"
+                                 Height="60"
+                                 FontSize="14"
+                                 Padding="6,4"
+                                 TextWrapping="Wrap"
+                                 AcceptsReturn="True"
+                                 VerticalContentAlignment="Top"
+                                 Margin="0,0,0,10"/>
+
+                        <TextBlock x:Name="ErrorText"
+                                   Foreground="#EF4444"
+                                   FontSize="13"
+                                   TextWrapping="Wrap"
+                                   Margin="0,0,0,10"/>
+
+                        <Button Content="Log Activity"
+                                Height="44"
+                                FontSize="15"
+                                FontWeight="Bold"
+                                Foreground="White"
+                                Background="#10B981"
+                                BorderThickness="0"
+                                Cursor="Hand"
+                                Click="Submit_Click">
+                            <Button.Resources>
+                                <Style TargetType="Border">
+                                    <Setter Property="CornerRadius" Value="8"/>
+                                </Style>
+                            </Button.Resources>
+                        </Button>
+                    </StackPanel>
+                </Border>
+
+                <Border x:Name="ResultCard"
+                        Background="White"
+                        CornerRadius="12"
+                        Padding="20"
+                        Margin="0,0,0,15"
+                        Visibility="Collapsed">
+                    <Border.Effect>
+                        <DropShadowEffect Color="#9CA3AF"
+                                          Opacity="0.1"
+                                          BlurRadius="5"
+                                          ShadowDepth="1"/>
+                    </Border.Effect>
+                    <StackPanel>
+                        <TextBlock Text="Today's Emission"
+                                   FontSize="14"
+                                   Foreground="#6B7280"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,0,0,6"/>
+                        <TextBlock x:Name="ResultText"
+                                   FontSize="28"
+                                   FontWeight="Bold"
+                                   Foreground="#1F2937"
+                                   HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+
+                <Button Content="Back to Dashboard"
+                        Height="40"
+                        FontSize="14"
+                        FontWeight="SemiBold"
+                        Foreground="#4B5563"
+                        Background="#E5E7EB"
+                        BorderThickness="0"
+                        Cursor="Hand"
+                        Click="Back_Click">
+                    <Button.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="8"/>
+                        </Style>
+                    </Button.Resources>
+                </Button>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Page>

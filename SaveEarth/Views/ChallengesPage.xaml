@@ -1,0 +1,131 @@
+<Page x:Class="SaveEarth.Views.ChallengesPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      Title="Challenges"
+      Background="#F3F4F6">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0"
+                Background="#10B981"
+                Padding="20">
+            <TextBlock Text="Challenges"
+                       FontSize="22"
+                       FontWeight="Bold"
+                       Foreground="White"
+                       HorizontalAlignment="Center"/>
+        </Border>
+
+        <ScrollViewer Grid.Row="1"
+                      Margin="20">
+            <StackPanel>
+                <ItemsControl x:Name="ChallengesList">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Background="White"
+                                    CornerRadius="10"
+                                    Padding="15"
+                                    Margin="0,0,0,12">
+                                <Border.Effect>
+                                    <DropShadowEffect Color="#9CA3AF"
+                                                      Opacity="0.1"
+                                                      BlurRadius="5"
+                                                      ShadowDepth="1"/>
+                                </Border.Effect>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Grid.Column="0">
+                                        <TextBlock Text="{Binding Title}"
+                                                   FontSize="16"
+                                                   FontWeight="Bold"
+                                                   Foreground="#1F2937"/>
+                                        <TextBlock Text="{Binding Description}"
+                                                   FontSize="12"
+                                                   Foreground="#6B7280"
+                                                   TextWrapping="Wrap"
+                                                   Margin="0,2,0,5"/>
+                                        <TextBlock Text="{Binding RewardText}"
+                                                   FontSize="13"
+                                                   FontWeight="SemiBold"
+                                                   Foreground="#10B981"/>
+                                    </StackPanel>
+                                    <Button Grid.Column="1"
+                                            Content="{Binding JoinLabel}"
+                                            IsEnabled="{Binding CanJoin}"
+                                            Tag="{Binding ChallengeId}"
+                                            Width="80"
+                                            Height="35"
+                                            VerticalAlignment="Center"
+                                            Background="#10B981"
+                                            Foreground="White"
+                                            FontWeight="Bold"
+                                            BorderThickness="0"
+                                            Cursor="Hand"
+                                            Click="Join_Click">
+                                        <Button.Resources>
+                                            <Style TargetType="Border">
+                                                <Setter Property="CornerRadius" Value="5"/>
+                                            </Style>
+                                        </Button.Resources>
+                                    </Button>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <TextBlock Text="Active Challenges"
+                           FontSize="16"
+                           FontWeight="Bold"
+                           Foreground="#1F2937"
+                           Margin="0,10,0,10"/>
+
+                <TextBlock x:Name="NoActiveText"
+                           Text="You have not joined any challenges yet."
+                           FontSize="13"
+                           Foreground="#6B7280"
+                           Margin="0,0,0,10"/>
+
+                <ItemsControl x:Name="ActiveList">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Background="White"
+                                    CornerRadius="10"
+                                    Padding="12"
+                                    Margin="0,0,0,8">
+                                <TextBlock Text="{Binding Title}"
+                                           FontSize="14"
+                                           FontWeight="SemiBold"
+                                           Foreground="#1F2937"/>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <Button Content="Back to Dashboard"
+                        Height="40"
+                        FontSize="14"
+                        FontWeight="SemiBold"
+                        Foreground="#4B5563"
+                        Background="#E5E7EB"
+                        BorderThickness="0"
+                        Cursor="Hand"
+                        Click="Back_Click"
+                        Margin="0,10,0,0">
+                    <Button.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="8"/>
+                        </Style>
+                    </Button.Resources>
+                </Button>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Page>
