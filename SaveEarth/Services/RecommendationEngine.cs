@@ -33,4 +33,15 @@ public class RecommendationEngine
         var recommendations = GenerateRecommendations(totalEmissions);
         return recommendations.ToArray();
     }
+
+    // Overload dengan konteks kualitas udara
+    public string[] GetSuggestions(float totalEmissions, int usAqi)
+    {
+        var recommendations = GenerateRecommendations(totalEmissions).ToList();
+        if (usAqi > 100)
+        {
+            recommendations.Add("Kualitas udara buruk, kurangi berkendara dan gunakan transportasi umum");
+        }
+        return recommendations.ToArray();
+    }
 }

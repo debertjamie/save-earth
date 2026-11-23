@@ -89,6 +89,13 @@
                     </EventTrigger>
                 </Button.Triggers>
             </Button>
+
+            <TextBlock x:Name="ModeStatusText"
+                       Text="Mode: Database"
+                       FontSize="12"
+                       Foreground="#6B7280"
+                       HorizontalAlignment="Center"
+                       Margin="0,20,0,0"/>
         </StackPanel>
     </Grid>
 </Page>

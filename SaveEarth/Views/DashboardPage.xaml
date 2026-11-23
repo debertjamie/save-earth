@@ -116,6 +116,62 @@
                     </StackPanel>
                 </Border>
 
+                <!-- Kartu Kualitas Udara -->
+                <Border Background="White"
+                        CornerRadius="12"
+                        Padding="20"
+                        Margin="0,0,0,20">
+                    <Border.Effect>
+                        <DropShadowEffect Color="#9CA3AF"
+                                          Opacity="0.1"
+                                          BlurRadius="5"
+                                          ShadowDepth="1"/>
+                    </Border.Effect>
+                    <StackPanel>
+                        <TextBlock Text="🌬️ Kualitas Udara"
+                                   FontSize="15"
+                                   FontWeight="Bold"
+                                   Foreground="#1F2937"
+                                   Margin="0,0,0,10"/>
+                        <Grid Margin="0,0,0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox x:Name="CityBox"
+                                     Grid.Column="0"
+                                     Text="Yogyakarta"
+                                     Height="34"
+                                     FontSize="14"
+                                     Padding="8,0"
+                                     VerticalContentAlignment="Center"
+                                     Margin="0,0,8,0"/>
+                            <Button x:Name="AirQualityButton"
+                                    Grid.Column="1"
+                                    Content="Cek"
+                                    Width="60"
+                                    Height="34"
+                                    FontSize="13"
+                                    FontWeight="Bold"
+                                    Foreground="White"
+                                    Background="#10B981"
+                                    BorderThickness="0"
+                                    Cursor="Hand"
+                                    Click="AirQuality_Click">
+                                <Button.Resources>
+                                    <Style TargetType="Border">
+                                        <Setter Property="CornerRadius" Value="6"/>
+                                    </Style>
+                                </Button.Resources>
+                            </Button>
+                        </Grid>
+                        <TextBlock x:Name="AirQualityText"
+                                   FontSize="13"
+                                   Foreground="#4B5563"
+                                   TextWrapping="Wrap"/>
+                    </StackPanel>
+                </Border>
+
                 <Button Content="Daily Tracker"
                         Height="44"
                         FontSize="15"

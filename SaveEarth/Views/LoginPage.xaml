@@ -106,6 +106,13 @@
                             FontWeight="SemiBold"
                             Cursor="Hand"
                             Click="ToggleButton_Click"/>
+
+                    <TextBlock x:Name="ModeStatusText"
+                               Text="Mode: Database"
+                               FontSize="12"
+                               Foreground="#6B7280"
+                               HorizontalAlignment="Center"
+                               Margin="0,15,0,0"/>
                 </StackPanel>
             </Border>
         </ScrollViewer>
