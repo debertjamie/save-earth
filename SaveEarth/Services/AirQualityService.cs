@@ -8,19 +8,31 @@ public record AirQualityResult(int UsAqi, double Pm25);
 
 public static class AirQualityService
 {
-    private static readonly HttpClient _http = new()
-    {
-        Timeout = TimeSpan.FromSeconds(10)
-    };
+    private static readonly HttpClient _http;
 
-    private static readonly JsonSerializerOptions _jsonOpts = new()
+    static AirQualityService()
     {
-        PropertyNameCaseInsensitive = true
-    };
+        var handler = new SocketsHttpHandler
+        {
+            ConnectTimeout = TimeSpan.FromSeconds(10)
+        };
+        _http = new HttpClient(handler)
+        {
+            Timeout = TimeSpan.FromSeconds(20)
+        };
+        _http.DefaultRequestHeaders.UserAgent.ParseAdd("SaveEarth/1.0 (Windows; C# WPF)");
+    }
+
+    /// <summary>
+    /// Pesan error terakhir jika terjadi exception pada panggilan HTTP / parsing.
+    /// Bernilai null jika hasil kosong karena kota memang tidak ditemukan.
+    /// </summary>
+    public static string? LastError { get; private set; }
 
     // Geocoding: cari kota by name, kembalikan (name, lat, lon) atau null
     public static async Task<(string City, double Lat, double Lon)?> FindCityAsync(string name)
     {
+        LastError = null;
         try
         {
             var url = $"https://geocoding-api.open-meteo.com/v1/search?name={Uri.EscapeDataString(name)}&count=1&language=id&format=json";
@@ -29,7 +41,7 @@ public static class AirQualityService
             var root = doc.RootElement;
 
             if (!root.TryGetProperty("results", out var results) || results.GetArrayLength() == 0)
-                return null;
+                return null; // Kota tidak ditemukan
 
             var r0 = results[0];
             var city = r0.GetProperty("name").GetString() ?? name;
@@ -37,14 +49,32 @@ public static class AirQualityService
             var lon = r0.GetProperty("longitude").GetDouble();
             return (city, lat, lon);
         }
-        catch (HttpRequestException) { return null; }
-        catch (TaskCanceledException) { return null; }
-        catch (JsonException) { return null; }
+        catch (HttpRequestException ex)
+        {
+            LastError = $"HttpRequestException: {ex.Message}";
+            return null;
+        }
+        catch (TaskCanceledException ex)
+        {
+            LastError = $"Timeout: {ex.Message}";
+            return null;
+        }
+        catch (JsonException ex)
+        {
+            LastError = $"JsonException: {ex.Message}";
+            return null;
+        }
+        catch (Exception ex)
+        {
+            LastError = $"{ex.GetType().Name}: {ex.Message}";
+            return null;
+        }
     }
 
     // Air quality: ambil US AQI dan PM2.5 untuk koordinat tertentu
     public static async Task<AirQualityResult?> GetAirQualityAsync(double lat, double lon)
     {
+        LastError = null;
         try
         {
             var latStr = lat.ToString("F5", CultureInfo.InvariantCulture);
@@ -53,13 +83,44 @@ public static class AirQualityService
             var json = await _http.GetStringAsync(url);
             using var doc = JsonDocument.Parse(json);
             var current = doc.RootElement.GetProperty("current");
-            var aqi = current.GetProperty("us_aqi").GetInt32();
-            var pm25 = current.GetProperty("pm2_5").GetDouble();
+
+            int aqi = 0;
+            if (current.TryGetProperty("us_aqi", out var aqiElem) && aqiElem.ValueKind == JsonValueKind.Number)
+            {
+                if (!aqiElem.TryGetInt32(out aqi) && aqiElem.TryGetDouble(out var aqiD))
+                {
+                    aqi = (int)Math.Round(aqiD);
+                }
+            }
+
+            double pm25 = 0;
+            if (current.TryGetProperty("pm2_5", out var pm25Elem) && pm25Elem.ValueKind == JsonValueKind.Number)
+            {
+                pm25Elem.TryGetDouble(out pm25);
+            }
+
             return new AirQualityResult(aqi, pm25);
         }
-        catch (HttpRequestException) { return null; }
-        catch (TaskCanceledException) { return null; }
-        catch (JsonException) { return null; }
+        catch (HttpRequestException ex)
+        {
+            LastError = $"HttpRequestException: {ex.Message}";
+            return null;
+        }
+        catch (TaskCanceledException ex)
+        {
+            LastError = $"Timeout: {ex.Message}";
+            return null;
+        }
+        catch (JsonException ex)
+        {
+            LastError = $"JsonException: {ex.Message}";
+            return null;
+        }
+        catch (Exception ex)
+        {
+            LastError = $"{ex.GetType().Name}: {ex.Message}";
+            return null;
+        }
     }
 
     // Kategori kualitas udara berdasarkan US AQI

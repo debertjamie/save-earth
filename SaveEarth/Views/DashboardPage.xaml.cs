@@ -59,7 +59,9 @@ public partial class DashboardPage : Page
         var cityResult = await AirQualityService.FindCityAsync(cityName);
         if (cityResult is null)
         {
-            AirQualityText.Text = "❌ Kota tidak ditemukan atau gagal terhubung ke internet.";
+            AirQualityText.Text = AirQualityService.LastError is null
+                ? "❌ Kota tidak ditemukan."
+                : $"❌ Gagal terhubung: {AirQualityService.LastError}";
             AirQualityButton.IsEnabled = true;
             return;
         }
@@ -70,7 +72,9 @@ public partial class DashboardPage : Page
         var aqResult = await AirQualityService.GetAirQualityAsync(lat, lon);
         if (aqResult is null)
         {
-            AirQualityText.Text = "❌ Gagal mengambil data kualitas udara. Periksa koneksi internet.";
+            AirQualityText.Text = AirQualityService.LastError is null
+                ? "❌ Gagal mengambil data kualitas udara."
+                : $"❌ Gagal mengambil data: {AirQualityService.LastError}";
             AirQualityButton.IsEnabled = true;
             return;
         }
