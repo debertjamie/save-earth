@@ -134,3 +134,9 @@ _NCrunch*
 
 # Local configuration files containing credentials
 appsettings.local.json
+
+# Publish output
+publish/
+
+# Distribusi folder (contains exe built artifact)
+Distribusi/
