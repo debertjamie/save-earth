@@ -9,6 +9,7 @@ public partial class WelcomePage : Page
     public WelcomePage()
     {
         InitializeComponent();
+        ModeStatusText.Text = Database.IsAvailable ? "Mode: Database" : "Mode: Offline (data tidak tersimpan)";
     }
 
     private void StartButton_Click(object sender, RoutedEventArgs e)

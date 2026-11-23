@@ -51,4 +51,25 @@ public class DailyTracking
     {
         return JsonSerializer.Serialize(this);
     }
+
+    /// <summary>
+    /// Rekonstruksi DailyTracking dari database.
+    /// Hanya boleh dipanggil oleh SaveEarthRepository.
+    /// </summary>
+    internal static DailyTracking FromStorage(
+        string userId, DateTime date, float dailyEmission,
+        string? activityType, float activityValue, string? notes)
+    {
+        var dt = new DailyTracking(userId, date, dailyEmission);
+        if (!string.IsNullOrWhiteSpace(activityType))
+            dt.RestoreActivity(activityType, activityValue, notes);
+        return dt;
+    }
+
+    private void RestoreActivity(string activityType, float activityValue, string? notes)
+    {
+        ActivityType = activityType;
+        ActivityValue = activityValue;
+        Notes = notes ?? string.Empty;
+    }
 }

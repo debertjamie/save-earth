@@ -12,6 +12,7 @@ public partial class LoginPage : Page
     {
         InitializeComponent();
         ApplyMode();
+        ModeStatusText.Text = Database.IsAvailable ? "Mode: Database" : "Mode: Offline (data tidak tersimpan)";
     }
 
     private void ApplyMode()
@@ -89,7 +90,7 @@ public partial class LoginPage : Page
 
         if (!AppState.Current.RegisterUser(name, email, password))
         {
-            ErrorText.Text = "Email already registered or invalid.";
+            ErrorText.Text = AppState.Current.LastRegisterError ?? "Email already registered or invalid.";
             return;
         }
 

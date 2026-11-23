@@ -16,6 +16,10 @@ public class User
     public List<string> DailyActivities { get; } = new();
     public int TotalPoints { get; private set; }
 
+    private User()
+    {
+    }
+
     public User(string userId, string name, string email, string password)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(userId);
@@ -105,6 +109,28 @@ public class User
     {
         ArgumentNullException.ThrowIfNull(survey);
         return string.Empty;
+    }
+
+    /// <summary>
+    /// Rekonstruksi User dari database tanpa meng-hash ulang password.
+    /// Hanya boleh dipanggil oleh SaveEarthRepository.
+    /// </summary>
+    internal static User FromStorage(string userId, string name, string email, string passwordHash, int totalPoints)
+    {
+        var user = new User
+        {
+            UserId = userId,
+            Name = name,
+            Email = email,
+            PasswordHash = passwordHash,
+            TotalPoints = totalPoints,
+        };
+        return user;
+    }
+
+    internal void SetTotalPoints(int points)
+    {
+        TotalPoints = points;
     }
 
     private static void ValidateEmail(string email)

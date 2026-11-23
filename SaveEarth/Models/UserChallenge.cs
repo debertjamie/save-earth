@@ -59,4 +59,26 @@ public class UserChallenge
         Progress = 100.0f;
         Status = ChallengeStatus.Completed;
     }
+
+    /// <summary>
+    /// Rekonstruksi UserChallenge dari database tanpa validasi ulang.
+    /// Hanya boleh dipanggil oleh SaveEarthRepository.
+    /// </summary>
+    internal static UserChallenge FromStorage(
+        string userId, string challengeId,
+        DateTime startDate, DateTime endDate,
+        ChallengeStatus status, float progress, int totalPoints)
+    {
+        var uc = new UserChallenge(userId, challengeId, startDate, endDate, totalPoints);
+        // private method in same class — allowed
+        uc.RestoreState(status, progress);
+        return uc;
+    }
+
+    // Called only by FromStorage to bypass normal state-transition methods
+    private void RestoreState(ChallengeStatus status, float progress)
+    {
+        Status = status;
+        Progress = progress;
+    }
 }

@@ -77,7 +77,7 @@ public partial class ChallengesPage : Page
     {
         if (sender is Button button && button.Tag is string challengeId)
         {
-            AppState.Current.CurrentUser?.JoinChallenge(challengeId);
+            AppState.Current.JoinChallenge(challengeId);
             Refresh();
         }
     }

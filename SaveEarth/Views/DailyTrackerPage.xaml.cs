@@ -37,6 +37,7 @@ public partial class DailyTrackerPage : Page
             var tracking = AppState.Current.GetOrCreateTodayTracking();
             tracking.EditLog(activityType, value, NotesBox.Text);
             var emission = new EmissionCalculator().CalculateDailyEmission(tracking);
+            AppState.Current.SaveDailyTracking(tracking);
 
             ResultText.Text = $"{emission:0.##} kg CO₂";
             ResultCard.Visibility = Visibility.Visible;
