@@ -6,6 +6,9 @@ namespace SaveEarth.Views;
 
 public partial class DashboardPage : Page
 {
+    // Simpan AQI terakhir agar bisa dipakai update rekomendasi
+    private int _lastUsAqi = 0;
+
     public DashboardPage()
     {
         InitializeComponent();
@@ -30,10 +33,65 @@ public partial class DashboardPage : Page
         var emission = AppState.Current.GetTodayEmission();
         EmissionText.Text = $"{emission:0.##} kg CO₂";
 
-        var suggestions = new RecommendationEngine().GetSuggestions(emission);
+        RefreshRecommendation(emission);
+    }
+
+    private void RefreshRecommendation(float emission)
+    {
+        var suggestions = new RecommendationEngine().GetSuggestions(emission, _lastUsAqi);
         RecommendationText.Text = suggestions.Length > 0
             ? suggestions[0]
             : "Keep up the good work!";
+    }
+
+    private async void AirQuality_Click(object sender, RoutedEventArgs e)
+    {
+        var cityName = CityBox.Text.Trim();
+        if (string.IsNullOrWhiteSpace(cityName))
+        {
+            AirQualityText.Text = "⚠️ Masukkan nama kota terlebih dahulu.";
+            return;
+        }
+
+        AirQualityButton.IsEnabled = false;
+        AirQualityText.Text = "Mencari...";
+
+        var cityResult = await AirQualityService.FindCityAsync(cityName);
+        if (cityResult is null)
+        {
+            AirQualityText.Text = "❌ Kota tidak ditemukan atau gagal terhubung ke internet.";
+            AirQualityButton.IsEnabled = true;
+            return;
+        }
+
+        var (city, lat, lon) = cityResult.Value;
+        AirQualityText.Text = "Mengambil data kualitas udara...";
+
+        var aqResult = await AirQualityService.GetAirQualityAsync(lat, lon);
+        if (aqResult is null)
+        {
+            AirQualityText.Text = "❌ Gagal mengambil data kualitas udara. Periksa koneksi internet.";
+            AirQualityButton.IsEnabled = true;
+            return;
+        }
+
+        var category = AirQualityService.Categorize(aqResult.UsAqi);
+        AirQualityText.Text =
+            $"📍 {city}\n" +
+            $"US AQI: {aqResult.UsAqi}  |  PM2.5: {aqResult.Pm25:0.#} µg/m³\n" +
+            $"Kategori: {category}";
+
+        // Update rekomendasi dengan AQI baru
+        _lastUsAqi = aqResult.UsAqi;
+        var emission = AppState.Current.GetTodayEmission();
+        var suggestions = new RecommendationEngine().GetSuggestions(emission, _lastUsAqi);
+        RecommendationText.Text = suggestions.Length > 0
+            ? string.Join("\n• ", suggestions.Prepend(""))
+            : "Keep up the good work!";
+        if (RecommendationText.Text.StartsWith("\n• "))
+            RecommendationText.Text = "• " + RecommendationText.Text.TrimStart('\n', '•', ' ');
+
+        AirQualityButton.IsEnabled = true;
     }
 
     private void DailyTracker_Click(object sender, RoutedEventArgs e)
@@ -52,3 +110,4 @@ public partial class DashboardPage : Page
         NavService.Go(new WelcomePage());
     }
 }
+
